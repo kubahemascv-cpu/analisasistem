@@ -1,0 +1,18 @@
+{
+  "name": "Monitoring CS Kubah Emas",
+  "short_name": "Monitoring CS",
+  "description": "Antrean leads, hasil harian, dan evaluasi CS Kubah Emas",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#F4FAF6",
+  "theme_color": "#17994F",
+  "lang": "id",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
