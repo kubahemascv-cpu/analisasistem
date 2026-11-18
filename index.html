@@ -28,6 +28,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer;border:0;background:none}
 svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
 .hide{display:none!important}
+.deskonly,.btn.deskonly{display:none}
 .mut{color:var(--mut)}.sm{font-size:12px}.xs{font-size:11px}.b{font-weight:700}.tr{text-align:right}
 .row{display:flex;align-items:center;gap:8px}.wrap{flex-wrap:wrap}.sp{flex:1}.col{display:flex;flex-direction:column;gap:8px}
 
@@ -186,6 +187,7 @@ table.t tr.batal td{color:var(--mut);text-decoration:line-through}
   .main{padding-bottom:30px}
   .page{padding:22px 26px}
   .fab{display:none}
+  .deskonly,.btn.deskonly{display:inline-flex}
   .stats{gap:10px;margin-bottom:14px}
   .stat{padding:12px 14px}
   .stat .n{font-size:24px}
@@ -456,7 +458,7 @@ function render(){
   var bar='<nav class="tabbar">'+tabs.map(function(t){return '<button class="'+(S.tab===t[0]?'on':'')+'" data-act="tab" data-v="'+t[0]+'">'+ic(t[1])+t[2]+'</button>';}).join('')+'</nav>';
   var titles={antrean:'Antrean Leads',hasil:'Hasil Harian',riwayat:'Riwayat Perubahan',setelan:'Pengaturan'};
   var top='<header class="top"><div class="mark">'+LOGO+'</div><div class="sp"><h2>'+titles[S.tab]+'</h2><div class="who">'+h(S.me.nama)+' · '+h(S.me.peran)+'</div></div>'+
-    '<button class="iconbtn" data-act="reload" title="Muat ulang">'+ic('refresh')+'</button><button class="iconbtn" data-act="logout" title="Keluar">'+ic('out')+'</button></header>';
+    (S.tab==='antrean'?'<button class="btn o deskonly" data-act="newlead">'+ic('plus')+'Lead baru</button>':'')+'<button class="iconbtn" data-act="reload" title="Muat ulang">'+ic('refresh')+'</button><button class="iconbtn" data-act="logout" title="Keluar">'+ic('out')+'</button></header>';
   var body='';
   if(S.tab==='antrean') body=antreanView(); else if(S.tab==='hasil') body=hasilView(); else if(S.tab==='riwayat') body=riwayatView(); else body=setelanView();
   var fab=S.tab==='antrean'?'<button class="fab" data-act="newlead" title="Lead baru">'+ic('plus')+'</button>':'';
