@@ -307,7 +307,8 @@ function loginView(){
     body='<form onsubmit="return doLogin(event)"><div class="field" style="text-align:left"><label>PIN untuk '+h(pu.nama)+'</label><input class="inp pin" id="lg-pin" type="password" inputmode="numeric" maxlength="6" autocomplete="current-password" placeholder="••••••" autofocus></div>'+
       '<button class="btn p full" id="lg-btn" type="submit">Masuk</button><button class="btn g full" style="margin-top:8px" type="button" data-act="lgback">Bukan '+h(pu.nama)+'</button></form>';
   } else {
-    body='<div class="sub" style="margin-bottom:12px">Pilih nama kamu</div><div class="col">'+S.daftar.users.map(function(u){
+    if(!S.daftar.users.length) body='<div class="warnbox" style="text-align:left">Belum ada pengguna aktif di Google Sheet ini. Buka tab <b>Users</b>: pastikan ada baris nama dengan kolom Aktif berisi "Ya" (bukan "Tidak"), atau jalankan <b>setupAwal</b> di Apps Script. Pastikan juga script ini menempel di Sheet yang benar.</div><button class="btn p full" onclick="S.daftar=null;render()">Muat ulang daftar</button>';
+    else body='<div class="sub" style="margin-bottom:12px">Pilih nama kamu</div><div class="col">'+S.daftar.users.map(function(u){
       return '<button class="btn '+(u.nama===last?'p':'g')+' full" style="justify-content:space-between" data-act="lgpick" data-v="'+h(u.nama)+'"><span>'+h(u.nama)+'</span><span class="pill '+(u.peran==='Manager'?'o':'')+'" style="background:'+(u.nama===last?'rgba(255,255,255,.25)':'')+';color:'+(u.nama===last?'#fff':'')+'">'+h(u.peran)+(u.pin?' · PIN':'')+'</span></button>';}).join('')+'</div>';
   }
   return '<div class="login"><div class="box"><div class="mark">'+LOGO+'</div><h1>Monitoring CS</h1>'+(pu&&pu.pin?'<div class="sub">Kubah Emas</div>':'<div class="sub" style="margin-bottom:6px">Kubah Emas · Antrean leads & hasil harian</div>')+body+'<div class="err" id="lg-err">'+h(S.err)+'</div></div></div>';
