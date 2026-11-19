@@ -1,5 +1,5 @@
 // SW Monitoring CS Kubah Emas — network-first untuk HTML, cache-first untuk aset statis.
-const CACHE = 'cs-monitor-v4';
+const CACHE = 'cs-monitor-v5';
 const ASSETS = ['manifest.json', 'icon-192.png', 'icon-512.png'];
 
 self.addEventListener('install', function (e) {
