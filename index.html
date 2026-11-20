@@ -145,10 +145,10 @@ textarea.inp{resize:vertical;min-height:70px}
 .hero .ln{font-size:12.5px;opacity:.95;display:flex;gap:14px;flex-wrap:wrap}
 .warnbox{background:var(--o50);border:1.5px solid var(--o100);color:var(--o700);border-radius:12px;padding:10px 12px;font-size:12.5px;font-weight:600;margin-bottom:12px}
 .tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
-.tile{background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:14px;box-shadow:var(--sh);text-align:left;width:100%}
+.tile{-webkit-appearance:none;appearance:none;color:var(--txt);font-family:inherit;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:14px;box-shadow:var(--sh);text-align:left;width:100%}
 .tile .n{font-size:26px;font-weight:800;letter-spacing:-.6px;line-height:1.1}
 .tile .l{font-size:12px;font-weight:700;color:var(--txt2);margin-top:3px}
-.tile .s{font-size:11.5px;color:var(--mut);margin-top:2px}
+.tile .s{font-size:12px;color:var(--txt2);margin-top:2px}
 .tile.warn .n{color:var(--o600)}.tile.bad .n{color:var(--red)}
 table.t{width:100%;border-collapse:collapse;font-size:12.5px}
 table.t th{text-align:left;font-size:11px;color:var(--mut);font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:6px 8px;border-bottom:1.5px solid var(--line)}
@@ -201,7 +201,7 @@ table.t tr.batal td{color:var(--mut);text-decoration:line-through}
 }
 @media(min-width:1180px){.tiles{grid-template-columns:repeat(4,1fr)}}
 @media print{.rail,.tabbar,.top,.fab{display:none!important}}
-.tiles.sx{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}.sech.sx{margin:22px 0 8px;padding-top:4px}.verd{font-size:12.5px;font-weight:700;margin:0 0 8px;padding:7px 10px;border-radius:9px;background:var(--g50);color:var(--mut)}.verd.warn{background:#fff3e6;color:var(--o700)}.verd.ok{background:var(--g50);color:var(--g800)}
+.sech.sx .xs{color:var(--txt2);font-size:12px}.tiles.sx{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}.sech.sx{margin:22px 0 8px;padding-top:4px}.verd{font-size:13px;font-weight:700;line-height:1.4;margin:0 0 8px;padding:9px 12px;border-radius:12px;background:var(--g100);border:1.5px solid var(--g200);color:var(--g800)}.verd-warn{background:var(--o50);border-color:var(--o100);color:#8F3F06}.verd-ok{background:var(--g100);border-color:var(--g200);color:var(--g800)}
 .sech{display:flex;align-items:center;gap:8px;margin:18px 0 8px;flex-wrap:wrap}.sech b{font-size:13.5px;font-weight:800;letter-spacing:-.2px}
 .qlbl{font-size:11.5px;font-weight:700;color:var(--mut);align-self:center}
 .kb{flex:1 1 100%;margin-bottom:2px}.kb .inp{padding:7px 10px;font-size:12.5px}
@@ -226,7 +226,7 @@ table.t tr.batal td{color:var(--mut);text-decoration:line-through}
 // ============================================================
 var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz80XbLzHL_tZSI4gUk_h5zt99_CXMn9Ec_MUQt2pUXQgSnA_O2cU7PYjiugyucwV1FDw/exec';
 var NEED_SCRIPT = 4;
-var APP_VER = 'v3.2';
+var APP_VER = 'v3.4';
 
 // Tahap = proses penjualan. Kondisi = posisi di antrean kerja. Prioritas = urgensi. Jangan disamakan.
 var TAHAP = ['Gali kebutuhan','Siap ditawarkan','Penawaran terkirim','Proses pesanan','Deal','Ditutup'];
@@ -931,7 +931,7 @@ function hasilView(){
   var jb=cfg.jam_pagi_mulai||'08:00', jt=cfg.jam_sore_selesai||'16:00';
   function sec(no,judul,tanya,pillTxt,vCls,vTxt,body){
     return '<div class="sech sx"><b>'+no+'. '+judul+'</b>'+(pillTxt?'<span class="pill">'+pillTxt+'</span>':'')+'<span class="xs mut">'+tanya+'</span></div>'+
-      (vTxt?'<div class="verd '+(vCls||'')+'">'+vTxt+'</div>':'')+body;
+      (vTxt?'<div class="verd '+(vCls?'verd-'+vCls:'')+'">'+vTxt+'</div>':'')+body;
   }
   // 2. Beban masuk
   var s2=sec(2,'Beban masuk','Seberat apa hari ini?','Total '+(r.sisa+r.baru),'','',
