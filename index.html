@@ -226,7 +226,7 @@ table.t tr.batal td{color:var(--mut);text-decoration:line-through}
 // ============================================================
 var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz80XbLzHL_tZSI4gUk_h5zt99_CXMn9Ec_MUQt2pUXQgSnA_O2cU7PYjiugyucwV1FDw/exec';
 var NEED_SCRIPT = 4;
-var APP_VER = 'v3.4';
+var APP_VER = 'v3.6';
 
 // Tahap = proses penjualan. Kondisi = posisi di antrean kerja. Prioritas = urgensi. Jangan disamakan.
 var TAHAP = ['Gali kebutuhan','Siap ditawarkan','Penawaran terkirim','Proses pesanan','Deal','Ditutup'];
@@ -510,6 +510,7 @@ function hari(D,date,nowS){
   function kd(l){ return kDay(l.masuk,cfgR); }
   var baru=L.filter(function(l){return kd(l).d===date&&l.jenis==='Baru';});
   var lama=L.filter(function(l){return kd(l).d===date&&l.jenis==='Lama';});
+  var spill=L.filter(function(l){return day(l.masuk)===date&&kd(l).d>date;});
   var luarJam=baru.filter(function(l){return kd(l).luar;}), selamaJam=baru.filter(function(l){return !kd(l).luar;});
   function selesaiPada(l){ return (l.ditutup&&day(l.ditutup)<=date)||(firstNota[l.id]&&firstNota[l.id]<=date); }
   function jatuh(t){ return isToday?t.jadwal<=nowS:day(t.jadwal)<=date; }
@@ -545,7 +546,7 @@ function hari(D,date,nowS){
   var wa=sah.filter(function(n){return n.kanal==='WA';}), toko=sah.filter(function(n){return n.kanal==='Toko';});
   var batal=N.filter(function(n){return n.status==='Batal'&&n.tanggal===date;});
   var hr=D.harian.filter(function(x){return x.tanggal===date;})[0]||null;
-  return {date:date,sisa:sisa.length,luarJam:luarJam.length,selamaJam:selamaJam.length,baru:baru.length,baruCalon:calon.length,bukanCalon:bukan,lama:lama.length,tunda:tunda.length,tundaLalu:tundaLalu,penawaran:tawar.length,
+  return {date:date,spill:spill.length,spillBukan:spill.filter(function(l){return l.bukanCalon;}).length,spillHari:spill.length?kd(spill[0]).d:'',sisa:sisa.length,luarJam:luarJam.length,selamaJam:selamaJam.length,baru:baru.length,baruCalon:calon.length,bukanCalon:bukan,lama:lama.length,tunda:tunda.length,tundaLalu:tundaLalu,penawaran:tawar.length,
     dipilah:dipilah,tungguN:tg.length,tungguAvg:tg.length?tg.reduce(function(a,x){return a+x;},0)/tg.length:null,tungguMax:tg.length?Math.max.apply(null,tg):null,
     menungguTutup:menunggu.length,belumDipilah:belumPilah.length,
     fuDue:due.length,fuDone:due.filter(function(t){return t.selesai;}).length,
@@ -940,6 +941,7 @@ function hasilView(){
     tile('Leads di luar jam kerja',r.luarJam,'masuk '+jt+' sampai '+jb+' (termasuk hari libur), baru dikerjakan hari ini','')+
     tile('Leads selama jam kerja',r.selamaJam,'masuk '+jb+' sampai '+jt+' hari ini','')+'</div>'+
     '<div class="xs mut" style="margin:-4px 0 6px">Leads baru '+r.baru+' ('+r.baruCalon+' calon pembeli'+(r.bukanCalon?' · '+r.bukanCalon+' bukan calon pembeli':'')+'). Pelanggan lama kembali: '+r.lama+(r.lama?' (tidak dihitung baru)':'')+'.</div>'+
+    (r.spill?'<div class="verd">Sudah masuk setelah jam tutup tanggal ini: '+r.spill+' lead'+(r.spillBukan?' ('+r.spillBukan+' bukan calon pembeli)':'')+'. Dihitung ke '+fmtLong(r.spillHari)+', jadi baru muncul di "Leads di luar jam kerja" pada tanggal itu.</div>':'')+
     (isLiburView(date,cfg)?'<div class="warnbox">Tanggal ini bukan hari kerja. Lead yang masuk hari ini dihitung ke hari kerja berikutnya.</div>':''));
   // 3. Antrean jalan?
   var v3c='', v3t;
@@ -1141,9 +1143,9 @@ act.masukedit=function(){ $('nl-masukbox').classList.remove('hide'); $('nl-masuk
 act.masukluar=function(){ $('nl-masuk').value=toDTL(tutupTerakhir(S.d.config)); $('nl-masukbox').classList.remove('hide'); $('nl-masukbtn').classList.add('hide'); $('nl-luarbtn').classList.add('hide'); masukKat(); };
 act.lsave=function(el,e,force){
   var again=el&&el.dataset&&el.dataset.again==='1';
-  var nama=$('nl-nama').value.trim(), wa=$('nl-wa').value.trim(), cs=$('nl-cs')?$('nl-cs').value:S.me.nama;
+  var nama=$('nl-nama').value.trim(), wa=$('nl-wa').value.trim(), cs=$('nl-cs')?$('nl-cs').value:'';
   if(!wa){ $('nl-err').textContent='Nomor WhatsApp wajib diisi.'; return; }
-  var body={nama:nama,wa:wa,cs:cs}; if(force) body.force=true;
+  var body={nama:nama,wa:wa}; if(cs) body.cs=cs; if(force) body.force=true;   // tanpa pilihan CS: server yang menentukan (CS aktif pertama)
   if(!$('nl-masukbox').classList.contains('hide')) body.masuk=fromDTL($('nl-masuk').value);
   mut('lead_create',body,'Lead disimpan').then(function(j){
     if(!j) return;
